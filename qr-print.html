@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Print QR Codes</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    .qr-container { display: flex; flex-wrap: wrap; gap: 10px; padding: 20px; }
+    .qr-item { width: 200px; text-align: center; border: 1px solid #ccc; padding: 10px; }
+    .qr-item img { width: 150px; height: 150px; }
+    @media print {
+      .qr-item { border: none; margin: 0; padding: 0; page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body onload="loadData()">
+  <h2>QR Code Print Sheet</h2>
+  <div class="qr-container" id="qrContainer"></div>
+  <script>
+    function loadData() {
+      const params = new URLSearchParams(window.location.search);
+      const data = params.get("data");
+      if (!data) {
+        alert("No data found");
+        return;
+      }
+      const decoded = decodeURIComponent(data);
+      const qrData = JSON.parse(decoded);
+      const container = document.getElementById("qrContainer");
+      qrData.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "qr-item";
+        const img = document.createElement("img");
+        img.src = item.QRCodeURL;
+        const suffix = document.createElement("div");
+        suffix.innerText = item.SuffixLabel;
+        const pharmacy = document.createElement("div");
+        pharmacy.innerText = item.PharmacyName;
+        div.appendChild(img);
+        div.appendChild(suffix);
+        div.appendChild(pharmacy);
+        container.appendChild(div);
+      });
+      setTimeout(() => window.print(), 1500);
+    }
+  </script>
+</body>
+</html>
