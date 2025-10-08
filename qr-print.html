@@ -1,89 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>QR Code Print Sheet</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    padding: 10px;
-  }
-  .qr-item {
-    display: inline-block;
-    margin: 10px;
-    text-align: center;
-    width: 150px;
-  }
-  img {
-    width: 150px;
-    height: 150px;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QR Code Print Sheet</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 10px;
+      margin: 0;
+    }
+    .qr-item {
+      display: block;
+      text-align: center;
+      margin: 0 auto 20px auto;
+      width: 100px;
+      page-break-after: always; /* Force each QR on a separate sticker */
+    }
+    img {
+      width: 100px;
+      height: 100px;
+    }
+    .label {
+      font-size: 10px;
+      margin-top: 5px;
+    }
+
+    @media print {
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      .qr-item {
+        page-break-after: always;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h1>QR Code Print Sheet</h1>
+  <h2>QR Code Print Sheet</h2>
   <div id="qrContainer">Loading QR Codes...</div>
 
-<script>
-// Function to get URL parameter by name
-function getParameterByName(name) {
-  const url = window.location.href;
-  name = name.replace(/[\[\]]/g, '\\$&');
-  const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
-  const results = regex.exec(url);
-  if (!results) return null;
-  if (!results[2]) return '';
-  return decodeURIComponent(results[2].replace(/\+/g, ' '));
-}
-
-// Main code to process 'data' param
-const dataParam = getParameterByName('data');
-const qrContainer = document.getElementById('qrContainer');
-
-if (!dataParam) {
-  qrContainer.innerHTML = '<p style="color:red;">No data found in URL.</p>';
-} else {
-  try {
-    // Decode the JSON string (dataParam is URL encoded JSON)
-    const qrData = JSON.parse(dataParam);
-
-    if (!Array.isArray(qrData) || qrData.length === 0) {
-      qrContainer.innerHTML = '<p>No QR codes to display.</p>';
-    } else {
-      qrContainer.innerHTML = ''; // Clear loading message
-
-      qrData.forEach(item => {
-        // Construct QR code URL using your API
-        const qrCodeURL = "https://api.qrserver.com/v1/create-qr-code/?data=" 
-          + encodeURIComponent(item.BarcodeID) 
-          + "&size=150x150";
-
-        // Create container div
-        const div = document.createElement('div');
-        div.className = 'qr-item';
-
-        // Create image element
-        const img = document.createElement('img');
-        img.src = qrCodeURL;
-        img.alt = 'QR code for ' + item.BarcodeID;
-
-        // Create label below image (you can adjust this)
-        const label = document.createElement('div');
-        label.textContent = item.SuffixLabel || item.BarcodeID;
-
-        div.appendChild(img);
-        div.appendChild(label);
-
-        qrContainer.appendChild(div);
-      });
+  <script>
+    // Function to get URL parameter by name
+    function getParameterByName(name) {
+      const url = window.location.href;
+      name = name.replace(/[\[\]]/g, '\\$&');
+      const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+      const results = regex.exec(url);
+      if (!results) return null;
+      if (!results[2]) return '';
+      return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
-  } catch (e) {
-    qrContainer.innerHTML = '<p style="color:red;">Error parsing QR code data.</p>';
-    console.error('Error parsing data param:', e);
-  }
-}
-</script>
 
+    // Get the encoded JSON from the URL
+    const dataParam = getParameterByName('data');
+    const qrContainer = document.getElementById('qrContainer');
+
+    if (!dataParam) {
+      qrContainer.innerHTML = '<p style="color:red;">No data found in URL.</p>';
+    } else {
+      try {
+        const qrData = JSON.parse(dataParam);
+
+        if (!Array.isArray(qrData) || qrData.length === 0) {
+          qrContainer.innerHTML = '<p>No QR codes to display.</p>';
+        } else {
+          qrContainer.innerHTML = ''; // Clear loading message
+
+          qrData.forEach(item => {
+            const qrCodeURL = "https://api.qrserver.com/v1/create-qr-code/?data=" +
+              encodeURIComponent(item.BarcodeID) +
+              "&size=100x100";
+
+            const div = document.createElement('div');
+            div.className = 'qr-item';
+
+            const img = document.createElement('img');
+            img.src = qrCodeURL;
+            img.alt = 'QR code for ' + item.BarcodeID;
+
+            const label = document.createElement('div');
+            label.className = 'label';
+            label.innerHTML = "<strong>" + (item.SuffixLabel || "") + "</strong><br/>" +
+                              (item.PharmacyName || "");
+
+            div.appendChild(img);
+            div.appendChild(label);
+
+            qrContainer.appendChild(div);
+          });
+        }
+      } catch (e) {
+        qrContainer.innerHTML = '<p style="color:red;">Error parsing QR code data.</p>';
+        console.error('Error parsing data param:', e);
+      }
+    }
+  </script>
 </body>
 </html>
