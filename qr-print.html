@@ -41,61 +41,65 @@
   <h2>QR Code Print Sheet</h2>
   <div id="qrContainer">Loading QR Codes...</div>
 
-  <script>
-    // Function to get URL parameter by name
-    function getParameterByName(name) {
-      const url = window.location.href;
-      name = name.replace(/[\[\]]/g, '\\$&');
-      const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
-      const results = regex.exec(url);
-      if (!results) return null;
-      if (!results[2]) return '';
-      return decodeURIComponent(results[2].replace(/\+/g, ' '));
-    }
+ <script>
+  function getParameterByName(name) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name);
+  }
 
-    // Get the encoded JSON from the URL
-    const dataParam = getParameterByName('data');
-    const qrContainer = document.getElementById('qrContainer');
+  const dataParam = getParameterByName('data');
+  const qrContainer = document.getElementById('qrContainer');
 
-    if (!dataParam) {
-      qrContainer.innerHTML = '<p style="color:red;">No data found in URL.</p>';
-    } else {
-      try {
-        const qrData = JSON.parse(dataParam);
+  if (!dataParam) {
+    qrContainer.innerHTML = '<p style="color:red;">No data found in URL.</p>';
+    console.error("data parameter missing");
+  } else {
+    try {
+      // Parse the string directly (assuming it's already decoded)
+      const qrData = JSON.parse(decodeURIComponent(dataParam));
 
-        if (!Array.isArray(qrData) || qrData.length === 0) {
-          qrContainer.innerHTML = '<p>No QR codes to display.</p>';
-        } else {
-          qrContainer.innerHTML = ''; // Clear loading message
+      if (!Array.isArray(qrData) || qrData.length === 0) {
+        qrContainer.innerHTML = '<p>No QR codes to display.</p>';
+        console.warn("Parsed qrData is not array or empty:", qrData);
+      } else {
+        qrContainer.innerHTML = '';
 
-          qrData.forEach(item => {
-            const qrCodeURL = "https://api.qrserver.com/v1/create-qr-code/?data=" +
-              encodeURIComponent(item.BarcodeID) +
-              "&size=100x100";
+        qrData.forEach(item => {
+          // Debug logging
+          console.log("Generating QR for:", item);
 
-            const div = document.createElement('div');
-            div.className = 'qr-item';
+          const qrCodeURL = "https://api.qrserver.com/v1/create-qr-code/?data=" +
+            encodeURIComponent(item.BarcodeID) +
+            "&size=100x100";
 
-            const img = document.createElement('img');
-            img.src = qrCodeURL;
-            img.alt = 'QR code for ' + item.BarcodeID;
+          const div = document.createElement('div');
+          div.className = 'qr-item';
 
-            const label = document.createElement('div');
-            label.className = 'label';
-            label.innerHTML = "<strong>" + (item.SuffixLabel || "") + "</strong><br/>" +
-                              (item.PharmacyName || "");
+          const img = document.createElement('img');
+          img.src = qrCodeURL;
+          img.alt = 'QR code for ' + item.BarcodeID;
 
-            div.appendChild(img);
-            div.appendChild(label);
+          // If image fails to load, show placeholder or error
+          img.onerror = function() {
+            console.error("Failed to load QR image for", item.BarcodeID, "using URL", qrCodeURL);
+          };
 
-            qrContainer.appendChild(div);
-          });
-        }
-      } catch (e) {
-        qrContainer.innerHTML = '<p style="color:red;">Error parsing QR code data.</p>';
-        console.error('Error parsing data param:', e);
+          const label = document.createElement('div');
+          label.className = 'label';
+          label.innerHTML = "<strong>" + (item.SuffixLabel || "") + "</strong><br/>" +
+                            (item.PharmacyName || "");
+
+          div.appendChild(img);
+          div.appendChild(label);
+          qrContainer.appendChild(div);
+        });
       }
+    } catch (e) {
+      qrContainer.innerHTML = '<p style="color:red;">Error parsing QR code data.</p>';
+      console.error("Exception in parsing or generating QR codes:", e);
     }
-  </script>
+  }
+</script>
+
 </body>
 </html>
