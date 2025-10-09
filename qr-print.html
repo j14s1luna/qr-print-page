@@ -4,40 +4,47 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>QR Code Print Sheet</title>
-  <style>
-    @page {
-      size: 3.5cm 2.5cm; /* Sticker size */
-      margin: 0;
-    }
+ <style>
+  @page {
+    size: 3.5cm 2.5cm; /* Sticker size */
+    margin: 0;
+  }
 
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+  }
 
-    .qr-item {
-      width: 3.5cm;
-      height: 2.5cm;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      page-break-after: always; /* Each QR gets its own sticker */
-    }
+  .qr-item {
+    width: 3.5cm;
+    height: 2.5cm;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    page-break-after: always;
+    box-sizing: border-box;
+  }
 
-    .qr-item img {
-      max-width: 100%;
-      max-height: 70%; /* Leave room for label */
-      object-fit: contain;
-    }
+  .qr-item img {
+    max-width: 100%;
+    max-height: 65%;
+    object-fit: contain;
+    margin: 0 auto;
+    display: block;
+  }
 
-    .label {
-      font-size: 8pt;
-      text-align: center;
-      padding: 2px;
-    }
-  </style>
+  .label {
+    font-size: 7pt;
+    margin-top: 2px;
+    line-height: 1.1;
+    word-break: break-word;
+    text-align: center;
+  }
+</style>
+
 </head>
 <body>
   <div id="qrContainer">Loading QR Codes...</div>
