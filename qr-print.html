@@ -5,29 +5,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>QR Code Print Sheet</title>
   <style>
+    @page {
+      size: 3.5cm 2.5cm; /* Sticker size */
+      margin: 0;
+    }
+
     body {
+      margin: 0;
+      padding: 0;
       font-family: Arial, sans-serif;
-      padding: 20px;
     }
+
     .qr-item {
-      display: block;
-      margin: 20px auto;
-      text-align: center;
-      page-break-after: always; /* For printer: Each QR code on separate label */
+      width: 3.5cm;
+      height: 2.5cm;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      page-break-after: always; /* Each QR gets its own sticker */
     }
+
     .qr-item img {
-      width: 150px;
-      height: 150px;
+      max-width: 100%;
+      max-height: 70%; /* Leave room for label */
+      object-fit: contain;
     }
+
     .label {
-      margin-top: 10px;
-      font-size: 18px;
+      font-size: 8pt;
+      text-align: center;
+      padding: 2px;
     }
   </style>
 </head>
 <body>
-
-  <h1>QR Code Print Sheet</h1>
   <div id="qrContainer">Loading QR Codes...</div>
 
   <script>
@@ -55,7 +67,7 @@
           qrData.forEach(item => {
             const qrCodeURL = "https://api.qrserver.com/v1/create-qr-code/?data="
               + encodeURIComponent(item.BarcodeID)
-              + "&size=150x150";
+              + "&size=100x100";
 
             const div = document.createElement('div');
             div.className = 'qr-item';
@@ -81,6 +93,5 @@
       }
     }
   </script>
-
 </body>
 </html>
