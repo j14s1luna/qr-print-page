@@ -7,27 +7,27 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      padding: 10px;
+      padding: 20px;
     }
     .qr-item {
       display: block;
-      margin: 10px auto;
+      margin: 20px auto;
       text-align: center;
       page-break-after: always; /* For printer: Each QR code on separate label */
     }
     .qr-item img {
-      width: 100px;
-      height: 100px;
+      width: 150px;
+      height: 150px;
     }
     .label {
       margin-top: 10px;
-      font-size: 20px;
+      font-size: 18px;
     }
   </style>
 </head>
 <body>
 
-  <!-- <h1>QR Code Print Sheet</h1> -->
+  <h1>QR Code Print Sheet</h1>
   <div id="qrContainer">Loading QR Codes...</div>
 
   <script>
@@ -55,7 +55,7 @@
           qrData.forEach(item => {
             const qrCodeURL = "https://api.qrserver.com/v1/create-qr-code/?data="
               + encodeURIComponent(item.BarcodeID)
-              + "&size=130x130";
+              + "&size=150x150";
 
             const div = document.createElement('div');
             div.className = 'qr-item';
