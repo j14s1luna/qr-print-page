@@ -55,7 +55,7 @@
           qrData.forEach(item => {
             const qrCodeURL = "https://api.qrserver.com/v1/create-qr-code/?data="
               + encodeURIComponent(item.BarcodeID)
-              + "&size=150x150";
+              + "&size=130x130";
 
             const div = document.createElement('div');
             div.className = 'qr-item';
