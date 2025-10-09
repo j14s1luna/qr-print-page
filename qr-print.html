@@ -27,7 +27,7 @@
 </head>
 <body>
 
-  <h1>QR Code Print Sheet</h1>
+  <!-- <h1>QR Code Print Sheet</h1> -->
   <div id="qrContainer">Loading QR Codes...</div>
 
   <script>
@@ -55,7 +55,7 @@
           qrData.forEach(item => {
             const qrCodeURL = "https://api.qrserver.com/v1/create-qr-code/?data="
               + encodeURIComponent(item.BarcodeID)
-              + "&size=150x150";
+              + "&size=100x100";
 
             const div = document.createElement('div');
             div.className = 'qr-item';
