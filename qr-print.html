@@ -6,7 +6,7 @@
   <title>QR Code Print Sheet</title>
   <style>
     @page {
-      size: 10cm 7.5cm; /* New sticker size */
+      size: 10cm 7.5cm;
       margin: 0;
     }
 
@@ -98,9 +98,9 @@
             const label = document.createElement('div');
             label.className = 'label';
             label.innerHTML =
-              "<strong>" + (item.SuffixLabel || "") + "</strong><br/>" +
-              (item.PharmacyName || "") + "<br/>" +
-              (item.MedicineName || "");
+              (item.SuffixLabel ? "<div>" + item.SuffixLabel + "</div>" : "") +
+              (item.PharmacyName ? "<div style='font-size:10pt; font-weight:bold;'>" + item.PharmacyName + "</div>" : "") +
+              (item.MedicineName ? "<div>" + item.MedicineName + "</div>" : "");
 
             div.appendChild(topLabel);
             div.appendChild(img);
