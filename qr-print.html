@@ -21,7 +21,7 @@
       height: 7.5cm;
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
+      justify-content: center;
       align-items: center;
       text-align: center;
       page-break-after: always;
@@ -29,47 +29,35 @@
       padding: 10px;
     }
 
-    /* Top label (Medicina Drug Store) */
-    .top-label {
-      font-weight: bold;
-      font-size: 14pt;
-      margin-bottom: 10px;
-    }
-
-    /* QR code container */
-    .qr-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 10px;
-      width: 100%;
-    }
-
-    /* QR code style */
     .qr-item img {
-      width: 3.5cm;
-      height: 3.5cm;
+      width: 4cm;
+      height: 4cm;
       object-fit: contain;
+      margin: 0 auto;
       display: block;
     }
 
-    /* Pharmacy name style */
-    .pharmacy-name {
-      font-size: 18pt;
-      font-weight: bold;
-      padding-left: 10px;
-      text-align: left;
-    }
-
-    /* Label style */
+    /* Label styles */
     .label {
-      font-size: 12pt;
+      font-size: 12pt;  /* Adjusted font size */
       line-height: 1.2;
       word-break: break-word;
       text-align: center;
+    }
+
+    /* Top label styles */
+    .top-label {
+      font-weight: bold;
+      font-size: 14pt;  /* Adjusted font size */
+      margin-bottom: 5px;
+    }
+
+    /* Pharmacy Name below QR Code */
+    .pharmacy-name {
+      font-size: 25pt; /* Increased font size */
+      font-weight: bold;
       margin-top: 10px;
-      padding: 5px;
-      border: 1px solid #000;
+      text-align: center;
     }
   </style>
 </head>
@@ -91,9 +79,7 @@
     } else {
       try {
         const decoded = decodeURIComponent(dataParam);
-        console.log("Decoded Data:", decoded);  // Log the decoded data for inspection
         const qrData = JSON.parse(decoded);
-        console.log("Parsed Data:", qrData);  // Log the parsed data
 
         if (!Array.isArray(qrData) || qrData.length === 0) {
           qrContainer.innerHTML = '<p>No QR codes to display.</p>';
@@ -101,12 +87,9 @@
           qrContainer.innerHTML = ''; // Clear loading text
 
           qrData.forEach(item => {
-            if (!item.BarcodeID || !item.PharmacyName) {
-              console.error("Missing necessary fields:", item);
-              return;
-            }
-
-            const qrCodeURL = "https://api.qrserver.com/v1/create-qr-code/?data=" + encodeURIComponent(item.BarcodeID) + "&size=250x250";
+            const qrCodeURL = "https://api.qrserver.com/v1/create-qr-code/?data="
+              + encodeURIComponent(item.BarcodeID)
+              + "&size=250x250";
 
             const div = document.createElement('div');
             div.className = 'qr-item';
@@ -116,16 +99,12 @@
             topLabel.className = 'top-label';
             topLabel.innerText = 'Medicina Drug Store';
 
-            // QR code container
-            const qrContainer = document.createElement('div');
-            qrContainer.className = 'qr-container';
-
             // QR code image
             const img = document.createElement('img');
             img.src = qrCodeURL;
             img.alt = 'QR code for ' + item.BarcodeID;
 
-            // Pharmacy name
+            // Pharmacy name below QR code
             const pharmacyName = document.createElement('div');
             pharmacyName.className = 'pharmacy-name';
             pharmacyName.innerText = item.PharmacyName || 'Pharmacy Name';
@@ -137,14 +116,11 @@
               (item.SuffixLabel ? "<div>" + item.SuffixLabel + "</div>" : "") +
               (item.MedicineName ? "<div>" + item.MedicineName + "</div>" : "");
 
-            // Append elements
-            qrContainer.appendChild(img);
-            qrContainer.appendChild(pharmacyName);
-
+            // Append everything to the qr-item div
             div.appendChild(topLabel);
-            div.appendChild(qrContainer);
+            div.appendChild(img);
+            div.appendChild(pharmacyName);  <!-- Pharmacy name below QR -->
             div.appendChild(label);
-
             qrContainer.appendChild(div);
           });
         }
