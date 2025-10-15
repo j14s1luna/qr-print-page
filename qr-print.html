@@ -91,7 +91,9 @@
     } else {
       try {
         const decoded = decodeURIComponent(dataParam);
+        console.log("Decoded Data:", decoded);  // Log the decoded data for inspection
         const qrData = JSON.parse(decoded);
+        console.log("Parsed Data:", qrData);  // Log the parsed data
 
         if (!Array.isArray(qrData) || qrData.length === 0) {
           qrContainer.innerHTML = '<p>No QR codes to display.</p>';
@@ -99,7 +101,6 @@
           qrContainer.innerHTML = ''; // Clear loading text
 
           qrData.forEach(item => {
-            // Check if necessary fields are present before proceeding
             if (!item.BarcodeID || !item.PharmacyName) {
               console.error("Missing necessary fields:", item);
               return;
