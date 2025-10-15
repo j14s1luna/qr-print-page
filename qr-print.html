@@ -1,140 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>QR Code Print Sheet</title>
-  <style>
-    @page {
-      size: 10cm 7.5cm;
-      margin: 0;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>QR Code Print Sheet</title>
+<style>
+@page {
+size: 10cm 7.5cm;
+margin: 0;
+}
 
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
+body {
+margin: 0;
+padding: 0;
+font-family: Arial, sans-serif;
+}
 
-    .qr-item {
-      width: 10cm;
-      height: 7.5cm;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      page-break-after: always;
-      box-sizing: border-box;
-      padding: 10px;
-      border: 2px solid #000;
-      position: relative;
-    }
+.qr-item {
+width: 10cm;
+height: 7.5cm;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+text-align: center;
+page-break-after: always;
+box-sizing: border-box;
+padding: 10px;
+}
 
-    .qr-item img {
-      width: 4cm;
-      height: 4cm;
-      object-fit: contain;
-      margin: 0 auto;
-      display: block;
-      border: 1px solid #000;
-    }
+.qr-item img {
+width: 4cm;
+height: 4cm;
+object-fit: contain;
+margin: 0 auto;
+display: block;
+}
 
-    /* Pharmacy Name */
-    .pharmacy-name {
-      position: absolute;
-      top: 5px;
-      left: 5px;
-      font-size: 14pt;
-      font-weight: bold;
-      padding: 2px;
-      background-color: white;
-      /* Removed the border */
-    }
-
-    .label {
+.label {
       font-size: 8pt;
-      line-height: 1.2;
-      word-break: break-word;
-      text-align: center;
-      padding-top: 5px;
-    }
+      font-size: 12pt;
+line-height: 1.2;
+word-break: break-word;
+text-align: center;
+}
 
-    .top-label {
-      font-weight: bold;
+.top-label {
+font-weight: bold;
       font-size: 10pt;
-      margin-bottom: 5px;
-    }
-  </style>
+      font-size: 14pt;
+margin-bottom: 5px;
+}
+</style>
 </head>
 <body>
-  <div id="qrContainer">Loading QR Codes...</div>
+<div id="qrContainer">Loading QR Codes...</div>
 
-  <script>
-    function getParameterByName(name) {
-      const params = new URLSearchParams(window.location.search);
-      return params.get(name);
-    }
+<script>
+function getParameterByName(name) {
+const params = new URLSearchParams(window.location.search);
+return params.get(name);
+}
 
-    const dataParam = getParameterByName('data');
-    const qrContainer = document.getElementById('qrContainer');
+const dataParam = getParameterByName('data');
+const qrContainer = document.getElementById('qrContainer');
 
-    if (!dataParam) {
-      qrContainer.innerHTML = '<p style="color:red;">No data found in URL.</p>';
-      console.error("No data param found in URL:", window.location.search);
-    } else {
-      try {
-        const decoded = decodeURIComponent(dataParam);
-        const qrData = JSON.parse(decoded);
-
-        if (!Array.isArray(qrData) || qrData.length === 0) {
-          qrContainer.innerHTML = '<p>No QR codes to display.</p>';
-        } else {
-          qrContainer.innerHTML = ''; // Clear loading text
-
-          qrData.forEach(item => {
-            const qrCodeURL = "https://api.qrserver.com/v1/create-qr-code/?data="
-              + encodeURIComponent(item.BarcodeID)
-              + "&size=250x250";
-
-            const div = document.createElement('div');
-            div.className = 'qr-item';
-
-            // Pharmacy Name to the left side
-            const pharmacyName = document.createElement('div');
-            pharmacyName.className = 'pharmacy-name';
-            pharmacyName.innerText = item.PharmacyName || 'Pharmacy Name';
-
-            // Top label
-            const topLabel = document.createElement('div');
-            topLabel.className = 'top-label';
-            topLabel.innerText = 'Medicina Drug Store';
-
-            // QR code image
-            const img = document.createElement('img');
-            img.src = qrCodeURL;
-            img.alt = 'QR code for ' + item.BarcodeID;
-
-            // Bottom label
-            const label = document.createElement('div');
-            label.className = 'label';
-            label.innerHTML =
-              (item.SuffixLabel ? "<div>" + item.SuffixLabel + "</div>" : "") +
-              (item.MedicineName ? "<div>" + item.MedicineName + "</div>" : "");
-
-            // Append everything
-            div.appendChild(pharmacyName);
-            div.appendChild(topLabel);
-            div.appendChild(img);
-            div.appendChild(label);
-            qrContainer.appendChild(div);
-          });
-        }
-      } catch (e) {
-        qrContainer.innerHTML = '<p style="color:red;">Error parsing QR code data.</p>';
-        console.error("Error parsing QR data:", e);
-      }
-    }
-  </script>
-</body>
-</html>
+if (!dataParam) {
+qrContainer.innerHTML = '<p style="color:red;">No data found in URL.</p>';
+console.error("No data param found in URL:", window.location.search);
+} else {
+try {
+const decoded = decodeURIComponent(dataParam);
+const qrData = JSON.parse(decoded);
