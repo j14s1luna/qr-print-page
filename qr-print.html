@@ -51,6 +51,14 @@
       font-size: 14pt;  /* Adjusted font size */
       margin-bottom: 5px;
     }
+
+    /* Pharmacy Name below QR Code */
+    .pharmacy-name {
+      font-size: 18pt; /* Increased font size */
+      font-weight: bold;
+      margin-top: 10px;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -86,7 +94,7 @@
             const div = document.createElement('div');
             div.className = 'qr-item';
 
-            // Top label
+            // Top label (Medicina Drug Store)
             const topLabel = document.createElement('div');
             topLabel.className = 'top-label';
             topLabel.innerText = 'Medicina Drug Store';
@@ -96,7 +104,12 @@
             img.src = qrCodeURL;
             img.alt = 'QR code for ' + item.BarcodeID;
 
-            // Bottom label
+            // Pharmacy name below QR code
+            const pharmacyName = document.createElement('div');
+            pharmacyName.className = 'pharmacy-name';
+            pharmacyName.innerText = item.PharmacyName || 'Pharmacy Name';
+
+            // Bottom label (optional additional info like Medicine Name)
             const label = document.createElement('div');
             label.className = 'label';
             label.innerHTML =
@@ -106,6 +119,7 @@
             // Append everything to the qr-item div
             div.appendChild(topLabel);
             div.appendChild(img);
+            div.appendChild(pharmacyName);  <!-- Pharmacy name below QR -->
             div.appendChild(label);
             qrContainer.appendChild(div);
           });
