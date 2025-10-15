@@ -27,7 +27,7 @@
       page-break-after: always;
       box-sizing: border-box;
       padding: 10px;
-      border: 2px solid #000; /* Adding border around QR item */
+      border: 2px solid #000;
       position: relative;
     }
 
@@ -37,19 +37,19 @@
       object-fit: contain;
       margin: 0 auto;
       display: block;
-      border: 1px solid #000; /* Adding border around QR code */
+      border: 1px solid #000;
     }
 
-    /* Logo in the top-right */
+    /* Logo */
     .logo {
       position: absolute;
       top: 10px;
       right: 10px;
-      width: 50px; /* Set a fixed size for the logo */
-      height: auto;
+      width: 50px;  /* Reduced size */
+      height: auto; /* Maintain aspect ratio */
     }
 
-    /* Pharmacy Name on the left side of QR code */
+    /* Other styles */
     .pharmacy-name {
       position: absolute;
       top: 10px;
@@ -61,7 +61,6 @@
       background-color: white;
     }
 
-    /* Label below the QR code (Box/Crate information) */
     .box-label {
       margin-top: 5px;
       font-size: 10pt;
@@ -120,10 +119,10 @@
             const div = document.createElement('div');
             div.className = 'qr-item';
 
-            // Add Logo to the upper right
+            // Add Logo to the upper right (hosted on Imgur)
             const logo = document.createElement('img');
             logo.className = 'logo';
-            logo.src = "logo.png";  // Replace with the path to your logo
+            logo.src = "https://i.imgur.com/UvRIlYP.png"; // Logo URL from Imgur
             logo.alt = 'Medicina Logo';
 
             // Pharmacy Name to the left side
