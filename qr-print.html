@@ -20,20 +20,18 @@
       width: 10cm;
       height: 7.5cm;
       display: flex;
-      flex-direction: column;
-      justify-content: center;
+      justify-content: space-between; /* Distribute space between QR code and pharmacy name */
       align-items: center;
-      text-align: center;
       page-break-after: always;
       box-sizing: border-box;
       padding: 10px;
+      border: 2px solid #000;
     }
 
     .qr-item img {
-      width: 4cm;
-      height: 4cm;
+      width: 3.5cm;  /* Reduced size for better fit */
+      height: 3.5cm;
       object-fit: contain;
-      margin: 0 auto;
       display: block;
     }
 
@@ -52,12 +50,18 @@
       margin-bottom: 5px;
     }
 
-    /* Pharmacy Name below QR Code */
+    /* Pharmacy Name styles */
     .pharmacy-name {
-      font-size: 25pt; /* Increased font size */
+      font-size: 18pt;  /* Slightly reduced font size to fit on ticker */
       font-weight: bold;
-      margin-top: 10px;
-      text-align: center;
+      text-align: left;  /* Align to the left next to the QR code */
+      padding-left: 10px;  /* Add padding to the left */
+    }
+
+    /* Container for Pharmacy Name and Label below */
+    .pharmacy-label-container {
+      text-align: left; /* Align the text left */
+      padding-left: 10px;
     }
   </style>
 </head>
@@ -87,9 +91,7 @@
           qrContainer.innerHTML = ''; // Clear loading text
 
           qrData.forEach(item => {
-            const qrCodeURL = "https://api.qrserver.com/v1/create-qr-code/?data="
-              + encodeURIComponent(item.BarcodeID)
-              + "&size=250x250";
+            const qrCodeURL = "https://api.qrserver.com/v1/create-qr-code/?data=" + encodeURIComponent(item.BarcodeID) + "&size=250x250";
 
             const div = document.createElement('div');
             div.className = 'qr-item';
@@ -104,12 +106,15 @@
             img.src = qrCodeURL;
             img.alt = 'QR code for ' + item.BarcodeID;
 
-            // Pharmacy name below QR code
+            // Pharmacy name to the right of the QR code
             const pharmacyName = document.createElement('div');
             pharmacyName.className = 'pharmacy-name';
             pharmacyName.innerText = item.PharmacyName || 'Pharmacy Name';
 
-            // Bottom label (optional additional info like Medicine Name)
+            // Label below Pharmacy Name
+            const labelContainer = document.createElement('div');
+            labelContainer.className = 'pharmacy-label-container';
+
             const label = document.createElement('div');
             label.className = 'label';
             label.innerHTML =
@@ -117,10 +122,11 @@
               (item.MedicineName ? "<div>" + item.MedicineName + "</div>" : "");
 
             // Append everything to the qr-item div
+            labelContainer.appendChild(label);
             div.appendChild(topLabel);
             div.appendChild(img);
-            div.appendChild(pharmacyName);  <!-- Pharmacy name below QR -->
-            div.appendChild(label);
+            div.appendChild(pharmacyName);  <!-- Pharmacy name next to QR code -->
+            div.appendChild(labelContainer);  <!-- Label below pharmacy name -->
             qrContainer.appendChild(div);
           });
         }
