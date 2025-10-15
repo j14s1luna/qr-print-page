@@ -27,6 +27,8 @@
       page-break-after: always;
       box-sizing: border-box;
       padding: 10px;
+      border: 2px solid #000; /* Adding border around QR item */
+      position: relative;
     }
 
     .qr-item img {
@@ -35,18 +37,52 @@
       object-fit: contain;
       margin: 0 auto;
       display: block;
+      border: 1px solid #000; /* Adding border around QR code */
+    }
+
+    /* Logo in the top-right */
+    .logo {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 50px; /* Set a fixed size for the logo */
+      height: auto;
+    }
+
+    /* Pharmacy Name on the left side of QR code */
+    .pharmacy-name {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 12pt;
+      font-weight: bold;
+      border: 1px solid #000;
+      padding: 2px;
+      background-color: white;
+    }
+
+    /* Label below the QR code (Box/Crate information) */
+    .box-label {
+      margin-top: 5px;
+      font-size: 10pt;
+      font-weight: bold;
+      text-align: center;
+      padding: 5px;
+      border: 1px solid #000;
+      width: 100%;
     }
 
     .label {
-      font-size: 12pt;
+      font-size: 8pt;
       line-height: 1.2;
       word-break: break-word;
       text-align: center;
+      padding-top: 5px;
     }
 
     .top-label {
       font-weight: bold;
-      font-size: 14pt;
+      font-size: 10pt;
       margin-bottom: 5px;
     }
   </style>
@@ -84,6 +120,17 @@
             const div = document.createElement('div');
             div.className = 'qr-item';
 
+            // Add Logo to the upper right
+            const logo = document.createElement('img');
+            logo.className = 'logo';
+            logo.src = "logo.png";  // Replace with the path to your logo
+            logo.alt = 'Medicina Logo';
+
+            // Pharmacy Name to the left side
+            const pharmacyName = document.createElement('div');
+            pharmacyName.className = 'pharmacy-name';
+            pharmacyName.innerText = item.PharmacyName || 'Pharmacy Name';
+
             // Top label
             const topLabel = document.createElement('div');
             topLabel.className = 'top-label';
@@ -99,12 +146,20 @@
             label.className = 'label';
             label.innerHTML =
               (item.SuffixLabel ? "<div>" + item.SuffixLabel + "</div>" : "") +
-              (item.PharmacyName ? "<div style='font-size:32px; font-weight:bold;'>" + item.PharmacyName + "</div>" : "") +
               (item.MedicineName ? "<div>" + item.MedicineName + "</div>" : "");
 
+            // Box/Crate label below QR code
+            const boxLabel = document.createElement('div');
+            boxLabel.className = 'box-label';
+            boxLabel.innerText = item.Box1 || 'Box1/Crate1'; // Adjust accordingly
+
+            // Append everything
+            div.appendChild(logo);
+            div.appendChild(pharmacyName);
             div.appendChild(topLabel);
             div.appendChild(img);
             div.appendChild(label);
+            div.appendChild(boxLabel);
             qrContainer.appendChild(div);
           });
         }
