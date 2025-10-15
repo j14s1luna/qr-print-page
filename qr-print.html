@@ -87,7 +87,7 @@
             // Top label
             const topLabel = document.createElement('div');
             topLabel.className = 'top-label';
-            topLabel.innerText = 'Medicina Drug Store';
+            topLabel.innerText = <div style="font-size: 14px">'Medicina Drug Store'</div>;
 
             // QR code image
             const img = document.createElement('img');
@@ -99,7 +99,7 @@
             label.className = 'label';
             label.innerHTML =
               (item.SuffixLabel ? "<div>" + item.SuffixLabel + "</div>" : "") +
-              (item.PharmacyName ? "<div style='font-size:10pt; font-weight:bold;'>" + item.PharmacyName + "</div>" : "") +
+              (item.PharmacyName ? "<div style='font-size:16px; font-weight:bold;'>" + item.PharmacyName + "</div>" : "") +
               (item.MedicineName ? "<div>" + item.MedicineName + "</div>" : "");
 
             div.appendChild(topLabel);
