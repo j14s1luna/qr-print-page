@@ -20,49 +20,58 @@
       width: 10cm;
       height: 7.5cm;
       display: flex;
-      justify-content: space-between; /* Distribute space between QR code and pharmacy name */
+      flex-direction: column;
+      justify-content: flex-start;
       align-items: center;
+      text-align: center;
       page-break-after: always;
       box-sizing: border-box;
       padding: 10px;
-      border: 2px solid #000;
     }
 
+    /* Top label (Medicina Drug Store) */
+    .top-label {
+      font-weight: bold;
+      font-size: 14pt;
+      margin-bottom: 10px;
+    }
+
+    /* QR code container */
+    .qr-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+      width: 100%;
+    }
+
+    /* QR code style */
     .qr-item img {
-      width: 3.5cm;  /* Reduced size for better fit */
+      width: 3.5cm;
       height: 3.5cm;
       object-fit: contain;
       display: block;
     }
 
-    /* Label styles */
+    /* Pharmacy name style */
+    .pharmacy-name {
+      font-size: 18pt;
+      font-weight: bold;
+      padding-left: 10px;
+      text-align: left;
+    }
+
+    /* Label style */
     .label {
-      font-size: 12pt;  /* Adjusted font size */
+      font-size: 12pt;
       line-height: 1.2;
       word-break: break-word;
       text-align: center;
+      margin-top: 10px;
+      padding: 5px;
+      border: 1px solid #000;
     }
 
-    /* Top label styles */
-    .top-label {
-      font-weight: bold;
-      font-size: 14pt;  /* Adjusted font size */
-      margin-bottom: 5px;
-    }
-
-    /* Pharmacy Name styles */
-    .pharmacy-name {
-      font-size: 18pt;  /* Slightly reduced font size to fit on ticker */
-      font-weight: bold;
-      text-align: left;  /* Align to the left next to the QR code */
-      padding-left: 10px;  /* Add padding to the left */
-    }
-
-    /* Container for Pharmacy Name and Label below */
-    .pharmacy-label-container {
-      text-align: left; /* Align the text left */
-      padding-left: 10px;
-    }
   </style>
 </head>
 <body>
@@ -101,32 +110,35 @@
             topLabel.className = 'top-label';
             topLabel.innerText = 'Medicina Drug Store';
 
+            // QR code container
+            const qrContainer = document.createElement('div');
+            qrContainer.className = 'qr-container';
+
             // QR code image
             const img = document.createElement('img');
             img.src = qrCodeURL;
             img.alt = 'QR code for ' + item.BarcodeID;
 
-            // Pharmacy name to the right of the QR code
+            // Pharmacy name
             const pharmacyName = document.createElement('div');
             pharmacyName.className = 'pharmacy-name';
             pharmacyName.innerText = item.PharmacyName || 'Pharmacy Name';
 
-            // Label below Pharmacy Name
-            const labelContainer = document.createElement('div');
-            labelContainer.className = 'pharmacy-label-container';
-
+            // Bottom label (optional additional info like Medicine Name)
             const label = document.createElement('div');
             label.className = 'label';
             label.innerHTML =
               (item.SuffixLabel ? "<div>" + item.SuffixLabel + "</div>" : "") +
               (item.MedicineName ? "<div>" + item.MedicineName + "</div>" : "");
 
-            // Append everything to the qr-item div
-            labelContainer.appendChild(label);
+            // Append elements
+            qrContainer.appendChild(img);
+            qrContainer.appendChild(pharmacyName);
+
             div.appendChild(topLabel);
-            div.appendChild(img);
-            div.appendChild(pharmacyName);  <!-- Pharmacy name next to QR code -->
-            div.appendChild(labelContainer);  <!-- Label below pharmacy name -->
+            div.appendChild(qrContainer);
+            div.appendChild(label);
+
             qrContainer.appendChild(div);
           });
         }
